@@ -1,1 +1,5 @@
-/pkg/siteTesting/frontend/node_modules
+/frontend/node_modules
+.idea
+app.db
+app.db-shm
+app.db-wal

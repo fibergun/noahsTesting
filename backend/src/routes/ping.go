@@ -1,4 +1,4 @@
-package siteTesting
+package routes
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ type PingResponse struct {
 	Status string `json:"status"`
 }
 
-func PingHandler(w http.ResponseWriter, r *http.Request) {
+func (s Server) pingHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -17,10 +17,4 @@ func PingHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(PingResponse{Status: "ok"})
-}
-
-func StartServer(addr string) error {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/ping", PingHandler)
-	return http.ListenAndServe(addr, mux)
 }
