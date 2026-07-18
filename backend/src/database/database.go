@@ -8,22 +8,47 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-const schema = `
+const usersSchema = `
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
-    tasks INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `
 
-func New() {
+const tasksSchema = `
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task TEXT NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+`
+
+const logsSchema = `
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+`
+
+type Database struct {
+	UsersDatabase *sql.DB
+	tasksDatabase *sql.DB
+	logsDatabase  *sql.DB
+}
+
+type UsersEntry struct {
+	id   int
+	name string
+}
+
+func New() Database {
 
 	db, err := sql.Open("sqlite", "./app.db")
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
 
 	db.SetMaxOpenConns(1)
 
@@ -40,44 +65,48 @@ func New() {
 	results, err = db.Exec("PRAGMA busy_timeout = 5000;")
 	fmt.Println(results, err)
 
-	if _, err := db.Exec(schema); err != nil {
-		fmt.Println("database error", err)
+	if _, err := db.Exec(usersSchema); err != nil {
+
 		log.Fatal(err)
 	}
 
-	fmt.Println("Testing database...")
-	// Insert
-	res, err := db.Exec("INSERT INTO users (name) VALUES (?)", "Alice")
-	if err != nil {
+	if _, err := db.Exec(tasksSchema); err != nil {
 
 		log.Fatal(err)
+	}
+
+	if _, err := db.Exec(logsSchema); err != nil {
+
+		log.Fatal(err)
+	}
+
+	// Insert
+
+	return Database{UsersDatabase: db}
+
+}
+
+func (db Database) Login(name string) {
+	res, err := db.UsersDatabase.Exec("INSERT INTO users (name, user) VALUES (?, ?)", name, 1)
+	if err != nil {
+		log.Fatal("Error inserting user: ", err)
 	}
 	id, _ := res.LastInsertId()
 
+	var count int
+	err = db.UsersDatabase.QueryRow("SELECT COUNT(*) FROM users WHERE name = ?", name).Scan(&count)
+	if err != nil {
+		log.Fatal("Error query-ing count: ", err)
+	}
+	fmt.Println("User count: ", count)
+
 	// Query single row
-	var name string
-	err = db.QueryRow("SELECT name FROM users WHERE id = ?", id).Scan(&name)
+	var entry UsersEntry
+	err = db.UsersDatabase.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&entry.id, &entry.name)
+	fmt.Println(entry, err)
 	if err != nil {
 
-		log.Fatal(err)
+		log.Fatal("Error query-ing user: ", err)
 	}
 
-	// Query multiple rows
-	rows, err := db.Query("SELECT id, name FROM users")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var id int
-		var name string
-		if err := rows.Scan(&id, &name); err != nil {
-			log.Fatal(err)
-		}
-		log.Println(id, name)
-	}
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
 }
