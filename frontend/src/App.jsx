@@ -1,30 +1,22 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Ping from './pages/Ping';
 
 function App() {
-  const [status, setStatus] = useState(null)
-  const [error, setError] = useState(null)
-
-  const checkPing = async () => {
-    setError(null)
-    setStatus(null)
-    try {
-      const res = await fetch('/ping')
-      if (!res.ok) throw new Error(`request failed: ${res.status}`)
-      const data = await res.json()
-      setStatus(data.status)
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
   return (
-    <div>
-      <h1>siteTesting</h1>
-      <button onClick={checkPing}>Ping backend</button>
-      {status && <p>Status: {status}</p>}
-      {error && <p>Error: {error}</p>}
-    </div>
-  )
+      <BrowserRouter>
+        <nav>
+          <Link to="/">Home</Link>
+          {' | '}
+          <Link to="/ping">Ping</Link>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/ping" element={<Ping />} />
+        </Routes>
+      </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

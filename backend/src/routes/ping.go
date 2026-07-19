@@ -10,6 +10,13 @@ type PingResponse struct {
 }
 
 func (s Server) pingHandler(w http.ResponseWriter, r *http.Request) {
+	//log.Println("PingHandler")
+	//cookie, err := r.Cookie("session")
+	//if err != nil {
+	//	log.Println("getting cookie: ", err)
+	//}
+	//fmt.Println(cookie.Value)
+
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
