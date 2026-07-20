@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import Ping from './pages/Ping';
+import Home from './pages/home';
+import Ping from './pages/ping';
 
 function App() {
   return (
