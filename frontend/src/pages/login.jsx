@@ -1,40 +1,33 @@
+import {useSession} from "./Session.jsx";
+import {useState} from "react";
 
-import {createContext, useContext, useState, useEffect} from "react";
+ function LoginForm(){
+    const {login} = useSession()
+    const [user, setUser] = useState("user")
 
-const SessionContext = createContext(null)
+    async function handleSubmit(event){
+        event.preventDefault()
 
-export function SessionProvider({ children }){
-const [session, setSession] = useState(null);
-const [loading, setLoading] = useState(true);
+        const response = await fetch('/user', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({user}),
+        })
 
-useEffect(() =>{
-    const stored = localStorage.getItem('session');
-    if (stored){
-        setSession (JSON.parse(stored));
+        if (response.ok){
+            const data = await response.json()
+            login(data.user)
+        }else{
+            alert('Login failed')
+        }
     }
-    setLoading(false);
-}, [])
 
-    const login = (userName) => {
-    const sessionData = {user: userName, loggedInAt: Date.now()};
-    localStorage.setItem('session', JSON.stringify(sessionData));
-    setSession(sessionData);
-    };
-
-const logout = () => {
-    localStorage.removeItem('session');
-    setSession(null);
-};
-
- return (
-     <SessionContext.Provider value={{session, login, logout, loading}}>
-         {children}
-     </SessionContext.Provider>
- );
+    return (
+        <form onSubmit={handleSubmit}>
+            <input value={user} onChange={(event) => setUser(event.target.value)} placeholder="user" />
+            <button type="submit">Log in</button>
+        </form>
+    )
 }
 
-export function useSession(){
-    const ctx = useContext(SessionContext);
-    if (!ctx) throw new Error('useSession must be used within SessionProvider');
-    return ctx;
-}
+export default LoginForm
