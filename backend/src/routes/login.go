@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Response struct {
@@ -28,7 +29,9 @@ func (s Server) login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	userReturn, err := s.db.Login(user.Username)
+	strings.ToLower(user.Username)
+
+	userReturn, err := s.db.Login(strings.ToLower(user.Username))
 	if err != nil {
 		log.Print("User login error", err)
 	}

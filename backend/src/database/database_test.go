@@ -8,6 +8,5 @@ import (
 func TestDataBase(t *testing.T) {
 	db := database.New()
 
-	db.Login("Noah")
-	db.Login("Daan")
+	db.DeleteAll()
 }

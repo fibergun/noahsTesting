@@ -2,7 +2,7 @@ import {useSession} from "./Session.jsx";
 import {Navigate} from "react-router-dom";
 
 
-function ProtectedRoute({children}){
+function ProtectedRoute({ children }){
     const {session, loading} = useSession()
 
     if (loading){
@@ -12,4 +12,8 @@ function ProtectedRoute({children}){
     if (!session){
         return <Navigate to="/login" replace />;
     }
+
+    return  children;
 }
+
+export default ProtectedRoute;

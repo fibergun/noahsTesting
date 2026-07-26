@@ -11,21 +11,17 @@ function App() {
           <Link to="/">Home</Link>
           {' | '}
           <Link to="/ping">Ping</Link>
-          {' | '}
-          <Link to="/login">Login</Link>
         </nav>
 
-        <Routes>
-            <Route path="/" element={
-                <ProtectedRoute><Home /></ProtectedRoute>
-            } />
-            <Route path="/ping" element={
-                <ProtectedRoute><Ping /></ProtectedRoute>
-            } />
-          <Route path="/login" element={
-              <Login />
-          } />
-        </Routes>
+          <Routes>
+              <Route path="/" element={
+                  <ProtectedRoute><Home /></ProtectedRoute>
+              } />
+              <Route path="/ping" element={
+                  <ProtectedRoute><Ping /></ProtectedRoute>
+              } />
+              <Route path="/login" element={<Login />} />
+          </Routes>
       </BrowserRouter>
   );
 }
