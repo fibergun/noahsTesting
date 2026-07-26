@@ -41,9 +41,9 @@ type Database struct {
 }
 
 type UsersEntry struct {
-	id        int64
-	name      string
-	timestamp time.Time
+	ID        int64     `json:"userID"`
+	Name      string    `json:"username"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 func New() Database {
@@ -95,31 +95,42 @@ func New() Database {
 
 }
 
-func (db Database) Login(name string) int64 {
+func (db Database) Login(name string) (UsersEntry, error) {
 	fmt.Println("logging in", name)
 
 	res, err := db.Exec("INSERT INTO users (name) VALUES (?)", name)
 	if err != nil {
-		log.Fatal("Error inserting user: ", err)
+		return db.GetUser(name)
 	}
 	id, err := res.LastInsertId()
 	if err != nil {
 		log.Fatal("Error getting user id: ", err)
 	}
 
-	return id
+	return UsersEntry{
+		ID:   id,
+		Name: name,
+	}, nil
 
 }
 
-func (db Database) GetUser(id int64) UsersEntry {
-	fmt.Println("getting user", id)
+func (db Database) GetUser(user string) (UsersEntry, error) {
+	fmt.Println("getting user", user)
 
-	rows, err := db.Query("SELECT id, name, created_at FROM users WHERE id = ?", id)
+	getUser := &UsersEntry{}
+
+	row := db.QueryRow("SELECT id, name, created_at FROM users WHERE name = ?", user)
+
+	err := row.Scan(&getUser.ID, &getUser.Name, &getUser.Timestamp)
+	fmt.Println("Rows: ", row)
 	if err != nil {
-		log.Fatal("Error getting user: ", err)
+		log.Println("Error getting user: ", err)
+		if err == sql.ErrNoRows {
+			return UsersEntry{}, err
+		}
 	}
-
-	defer rows.Close()
+	fmt.Println("Get user: ", getUser)
+	return *getUser, nil
 
 }
 

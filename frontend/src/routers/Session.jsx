@@ -15,8 +15,8 @@ useEffect(() =>{
     setLoading(false);
 }, [])
 
-    const login = (userName) => {
-    const sessionData = {user: userName, loggedInAt: Date.now()};
+    const login = (userName, userID) => {
+    const sessionData = {username: userName, userID: userID, loggedInAt: Date.now()};
     localStorage.setItem('session', JSON.stringify(sessionData));
     setSession(sessionData);
     };

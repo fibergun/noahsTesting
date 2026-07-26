@@ -1,9 +1,11 @@
-import {useSession} from "./Session.jsx";
+import {useSession} from "../routers/Session.jsx";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
  function LoginForm(){
     const {login} = useSession()
     const [user, setUser] = useState("user")
+     const navigate = useNavigate()
 
     async function handleSubmit(event){
         event.preventDefault()
@@ -16,7 +18,8 @@ import {useState} from "react";
 
         if (response.ok){
             const data = await response.json()
-            login(data.user)
+            login(data.username, data.userID)
+            navigate(`/`)
         }else{
             alert('Login failed')
         }

@@ -3,6 +3,7 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -12,7 +13,6 @@ type Response struct {
 
 type User struct {
 	Username string `json:"user"`
-	userID   int64  `json:"userid"`
 }
 
 func (s Server) login(w http.ResponseWriter, r *http.Request) {
@@ -28,11 +28,14 @@ func (s Server) login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	user.userID = s.db.Login(user.Username)
+	userReturn, err := s.db.Login(user.Username)
+	if err != nil {
+		log.Print("User login error", err)
+	}
 
 	fmt.Printf("user: %v\n", user)
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(userReturn)
 }

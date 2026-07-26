@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/home';
 import Ping from './pages/ping';
 import Login from './pages/login.jsx'
+import ProtectedRoute from './routers/ProtectedRoute.jsx'
 
 function App() {
   return (
@@ -15,9 +16,15 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/ping" element={<Ping />} />
-          <Route path="/login" element={<Login />} />
+            <Route path="/" element={
+                <ProtectedRoute><Home /></ProtectedRoute>
+            } />
+            <Route path="/ping" element={
+                <ProtectedRoute><Ping /></ProtectedRoute>
+            } />
+          <Route path="/login" element={
+              <Login />
+          } />
         </Routes>
       </BrowserRouter>
   );
