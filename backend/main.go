@@ -10,10 +10,4 @@ func main() {
 
 	log.Fatal(s.StartServer(":8080"))
 
-	//d := database.New()
-	//defer d.Close()
-	//
-	//d.Login("Noah")
-	//d.DeleteAll()
-
 }

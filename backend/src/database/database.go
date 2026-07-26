@@ -20,16 +20,19 @@ CREATE TABLE IF NOT EXISTS users (
 const tasksSchema = `
 CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    task TEXT NOT NULL UNIQUE,
+    task TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `
 
 const logsSchema = `
 CREATE TABLE IF NOT EXISTS logs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    log_id INTEGER PRIMARY KEY,
+    task_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `
 
@@ -38,7 +41,7 @@ type Database struct {
 }
 
 type UsersEntry struct {
-	id        int
+	id        int64
 	name      string
 	timestamp time.Time
 }
@@ -92,34 +95,31 @@ func New() Database {
 
 }
 
-func (db Database) Login(name string) {
+func (db Database) Login(name string) int64 {
 	fmt.Println("logging in", name)
 
 	res, err := db.Exec("INSERT INTO users (name) VALUES (?)", name)
 	if err != nil {
 		log.Fatal("Error inserting user: ", err)
 	}
-	id, _ := res.LastInsertId()
-
-	//res, err = db.UsersDatabase.Exec("INSERT INTO tasks (task) VALUES (?)", name)
-	//if err != nil {
-	//	log.Fatal("Error inserting task: ", err)
-	//}
-
-	var count int
-	err = db.QueryRow("SELECT COUNT(*) FROM users WHERE name = ?", name).Scan(&count)
+	id, err := res.LastInsertId()
 	if err != nil {
-		log.Fatal("Error query-ing count: ", err)
+		log.Fatal("Error getting user id: ", err)
 	}
-	fmt.Println("User count: ", count)
 
-	var entry UsersEntry
-	err = db.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&entry.id, &entry.name, &entry.timestamp)
-	fmt.Println(entry, err)
+	return id
+
+}
+
+func (db Database) GetUser(id int64) UsersEntry {
+	fmt.Println("getting user", id)
+
+	rows, err := db.Query("SELECT id, name, created_at FROM users WHERE id = ?", id)
 	if err != nil {
-
-		log.Fatal("Error query-ing user: ", err)
+		log.Fatal("Error getting user: ", err)
 	}
+
+	defer rows.Close()
 
 }
 
@@ -130,3 +130,23 @@ func (db Database) DeleteAll() {
 	}
 	fmt.Println(res)
 }
+
+//res, err = db.UsersDatabase.Exec("INSERT INTO tasks (task) VALUES (?)", name)
+//if err != nil {
+//	log.Fatal("Error inserting task: ", err)
+//}
+
+//var count int
+//err = db.QueryRow("SELECT COUNT(*) FROM users WHERE name = ?", name).Scan(&count)
+//if err != nil {
+//	log.Fatal("Error query-ing count: ", err)
+//}
+//fmt.Println("User count: ", count)
+//
+//var entry UsersEntry
+//err = db.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&entry.id, &entry.name, &entry.timestamp)
+//fmt.Println(entry, err)
+//if err != nil {
+//
+//	log.Fatal("Error query-ing user: ", err)
+//}

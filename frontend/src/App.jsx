@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/home';
 import Ping from './pages/ping';
+import Login from './pages/login.jsx'
 
 function App() {
   return (
@@ -9,11 +10,14 @@ function App() {
           <Link to="/">Home</Link>
           {' | '}
           <Link to="/ping">Ping</Link>
+          {' | '}
+          <Link to="/login">Login</Link>
         </nav>
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/ping" element={<Ping />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
   );
