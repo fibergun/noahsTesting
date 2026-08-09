@@ -1,8 +1,8 @@
 import {useSession} from "../routers/Session.jsx";
 import {useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
- function LoginForm(){
+ function LoginForm({group}){
     const {login} = useSession()
     const [user, setUser] = useState("user")
      const navigate = useNavigate()
@@ -10,7 +10,7 @@ import {useNavigate, useParams} from "react-router-dom";
     async function handleSubmit(event){
         event.preventDefault()
 
-        const response = await fetch('/user', {
+        const response = await fetch(`/api/${group}/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({user}),
@@ -21,7 +21,8 @@ import {useNavigate, useParams} from "react-router-dom";
             login(data.username, data.userID)
             navigate(`/`)
         }else{
-            alert('Login failed')
+            const message = await response.text()
+            alert(message)
         }
     }
 
@@ -31,17 +32,6 @@ import {useNavigate, useParams} from "react-router-dom";
             <button type="submit">Log in</button>
         </form>
     )
-}
-
-function Login(){
-     const {group} = useParams();
-
-     return(
-         <div>
-             <p>Logging into group: {group}</p>
-             <LoginForm group = {group}/>
-         </div>
-     )
 }
 
 export default LoginForm
