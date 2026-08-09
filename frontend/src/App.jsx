@@ -20,7 +20,7 @@ function App() {
               <Route path="/ping" element={
                   <ProtectedRoute><Ping /></ProtectedRoute>
               } />
-              <Route path="/login" element={<Login />} />
+              <Route path="/:group/login" element={<Login />} />
           </Routes>
       </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import {useSession} from "../routers/Session.jsx";
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
  function LoginForm(){
     const {login} = useSession()
@@ -31,6 +31,17 @@ import {useNavigate} from "react-router-dom";
             <button type="submit">Log in</button>
         </form>
     )
+}
+
+function Login(){
+     const {group} = useParams();
+
+     return(
+         <div>
+             <p>Logging into group: {group}</p>
+             <LoginForm group = {group}/>
+         </div>
+     )
 }
 
 export default LoginForm
