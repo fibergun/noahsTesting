@@ -8,11 +8,7 @@ import (
 	"strings"
 )
 
-type Response struct {
-	Status string `json:"status"`
-}
-
-type User struct {
+type UserRequest struct {
 	Username string `json:"user"`
 }
 
@@ -23,20 +19,28 @@ func (s Server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := User{}
-	err := json.NewDecoder(r.Body).Decode(&user)
+	group := r.PathValue("group")
+
+	groupID, err := s.db.GetGroup(group)
+	if err != nil {
+		http.Error(w, "group not found", http.StatusNotFound)
+		return
+	}
+
+	user := UserRequest{}
+	err = json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
 	strings.ToLower(user.Username)
 
-	userReturn, err := s.db.Login(strings.ToLower(user.Username))
+	userReturn, err := s.db.Login(strings.ToLower(user.Username), groupID)
 	if err != nil {
-		log.Print("User login error", err)
+		log.Println("getting user :", err)
+		http.Error(w, fmt.Sprintf("getting user: %T", err), http.StatusNotFound)
+		return
 	}
-
-	fmt.Printf("user: %v\n", user)
 
 	w.Header().Set("Content-Type", "application/json")
 

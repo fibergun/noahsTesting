@@ -30,5 +30,8 @@ func (s Server) StartServer(addr string) error {
 func (s Server) loadRoutes() {
 	log.Println("Loading routes...")
 	s.server.HandleFunc("/ping", s.pingHandler)
-	s.server.HandleFunc("/user", s.login)
+	s.server.HandleFunc("/api/{group}/login", s.login)
+	s.server.HandleFunc("/tasks/make", s.makeTask) //maybe also use to update?
+	s.server.HandleFunc("/tasks/list", s.getTasks)
+	s.server.HandleFunc("/tasks/random", s.getRandomTask)
 }

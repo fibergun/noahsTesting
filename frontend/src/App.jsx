@@ -5,6 +5,7 @@ import Group from './routers/Group.jsx'
 import ProtectedRoute from './routers/ProtectedRoute.jsx'
 import MakeTask from "./pages/MakeTask.jsx";
 import GetAllTasks from "./pages/GetAllTasks.jsx";
+import GetRandomTask from "./pages/GetRandomTask.jsx";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
             <Link to="/ping">Ping</Link>
             {' | '}
             <Link to="/tasks/make">Make Task</Link>
+            {' | '}
+            <Link to="/tasks/random">Get Random Task</Link>
             {' | '}
             <Link to="/tasks/list">All tasks</Link>
         </nav>
@@ -28,6 +31,9 @@ function App() {
               } />
               <Route path="/tasks/make" element={
                   <ProtectedRoute><MakeTask /></ProtectedRoute>
+              } />
+              <Route path="/tasks/random" element={
+                  <ProtectedRoute><GetRandomTask /></ProtectedRoute>
               } />
               <Route path="/tasks/list" element={
                   <ProtectedRoute><GetAllTasks /></ProtectedRoute>

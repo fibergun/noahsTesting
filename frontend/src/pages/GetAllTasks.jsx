@@ -12,7 +12,7 @@ function GetAllTasks(){
 
     async function handleRequest() {
         try {
-            const response = await fetch(`/tasks/list?username=${session.userID}`, {
+            const response = await fetch(`/tasks/list?userID=${session.userID}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
             })
@@ -24,7 +24,7 @@ function GetAllTasks(){
             const data = await response.json();
             setTasks(data);
         } catch (err) {
-            setError(err.message);
+            alert("Something went wrong: " + err.message);
         } finally {
             setLoading(false);
         }

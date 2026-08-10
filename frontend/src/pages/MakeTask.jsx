@@ -5,21 +5,25 @@ function MakeTask(){
     const {session} = useSession()
     const [task, setTask] = useState("task")
 
-    async function handleMakeTask(event){
+    async function handleMakeTask(event) {
         event.preventDefault()
 
-        const response = await fetch(`/tasks/make`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({userID: session.userID, task})
-        })
+        try {
+            const response = await fetch(`/tasks/make`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({userID: session.userID, task})
+            })
 
-        if (response.ok){
-            const data = await response.json()
-            alert("succesfully created task: "+ data.task+ " with ID: "+ data.taskID)
-        }else{
-            const message = await response.text()
-            alert(message)
+            if (response.ok) {
+                const data = await response.json()
+                alert("succesfully created task: " + data.task + " with ID: " + data.taskID)
+            } else {
+                const message = await response.text()
+                alert(message)
+            }
+        }catch(err){
+            alert("Something went wrong: " + err.message);
         }
     }
 
