@@ -82,6 +82,12 @@ func (db Database) GetRandomTask(groupID int64) (TasksEntry, error) {
 		log.Println("Error getting task: ", err)
 		return TasksEntry{}, err
 	}
+
+	_, err = db.addTaskToLogs(getTask.ID, getTask.UserID)
+	if err != nil {
+		log.Println("Error adding task to logs: ", err)
+	}
+
 	return *getTask, nil
 
 }
