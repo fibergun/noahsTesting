@@ -14,8 +14,9 @@ const usersSchema = `
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER NOT NULL,
-    name TEXT NOT NULL UNIQUE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    name TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(group_id, name)
 );
 `
 
@@ -151,15 +152,15 @@ func (db Database) Login(name string, groupID int) (UsersEntry, error) {
 
 	}
 
-	return db.GetUser(name)
+	return db.GetUser(name, groupID)
 
 }
 
-func (db Database) GetUser(user string) (UsersEntry, error) {
+func (db Database) GetUser(user string, groupID int) (UsersEntry, error) {
 
 	getUser := &UsersEntry{}
 
-	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE name = ?", user)
+	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE name = ? AND group_id = ?", user, groupID)
 
 	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.Timestamp)
 	if err != nil {
