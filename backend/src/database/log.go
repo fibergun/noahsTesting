@@ -7,11 +7,8 @@ import (
 
 func (db Database) addTaskToLogs(taskID int64, userID int64) (LogsEntry, error) {
 	checkTask, ok, err := db.checkTaskExistsInLogs(taskID, userID)
-	if ok && err == nil {
-		return checkTask, nil
-	}
-	if err != nil {
-		return LogsEntry{}, err
+	if ok {
+		return checkTask, fmt.Errorf("user already has this task")
 	}
 
 	_, err = db.Exec("INSERT INTO logs (task_id, user_id) VALUES (?, ?) ", taskID, userID)
@@ -21,7 +18,7 @@ func (db Database) addTaskToLogs(taskID int64, userID int64) (LogsEntry, error) 
 
 	task, ok, err := db.checkTaskExistsInLogs(taskID, userID)
 	if !ok {
-		return LogsEntry{}, fmt.Errorf("failed to retrieve task to logs: %v", err)
+		return LogsEntry{}, fmt.Errorf("failed to retrieve task from logs: %v", err)
 	}
 	return task, nil
 }
@@ -29,7 +26,7 @@ func (db Database) addTaskToLogs(taskID int64, userID int64) (LogsEntry, error) 
 func (db Database) checkTaskExistsInLogs(taskID int64, userID int64) (LogsEntry, bool, error) {
 	getLog := LogsEntry{}
 
-	row := db.QueryRow("SELECT * FROM logs WHERE (user_id, task_id) = (?,?)", taskID, userID)
+	row := db.QueryRow("SELECT * FROM logs WHERE (task_id, user_id) = (?,?)", taskID, userID)
 
 	err := row.Scan(&getLog.ID, &getLog.TaskID, &getLog.UserID, &getLog.Completed, &getLog.UpdatedAt)
 	if err != nil {

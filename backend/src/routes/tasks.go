@@ -96,7 +96,7 @@ func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	randomTask, err := s.db.GetRandomTask(user.GroupID)
+	randomTask, err := s.db.GetRandomTask(user.GroupID, user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

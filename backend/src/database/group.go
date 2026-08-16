@@ -2,9 +2,9 @@ package database
 
 import "fmt"
 
-func (db *Database) GetGroup(group string) (int, error) {
+func (db *Database) GetGroup(group string) (int64, error) {
 	fmt.Println("Getting group", group)
-	var something int
+	var something int64
 
 	resp := db.QueryRow("SELECT id FROM groups WHERE name = ?", group)
 

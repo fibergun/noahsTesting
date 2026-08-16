@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 )
@@ -56,36 +57,24 @@ func (db Database) GetAllTasksByUserID(userID int) ([]TasksEntry, error) {
 	return getAllTasks, nil
 }
 
-//func (db Database) getRandomTask(userID int) (TasksEntry, error) {
-//
-//	user, err := db.GetUserByID(userID)
-//	if err != nil {
-//		return TasksEntry{}, err
-//	}
-//
-//	//get random from task database
-//
-//	// make sure they don't have them yet
-//
-//	//add to log database
-//
-//	//return which task they have gotten
-//
-//}
-
-func (db Database) GetRandomTask(groupID int64) (TasksEntry, error) {
+func (db Database) GetRandomTask(groupID int64, userID int64) (TasksEntry, error) {
 	getTask := &TasksEntry{}
-	row := db.QueryRow("SELECT id, task, group_id, user_id, created_at FROM tasks WHERE group_id = ? ORDER BY RANDOM() LIMIT 1", groupID)
+	row := db.QueryRow(`SELECT id, task, group_id, user_id, created_at FROM tasks
+		WHERE group_id = ? AND id NOT IN (SELECT task_id FROM logs WHERE user_id = ?)
+		ORDER BY RANDOM() LIMIT 1`, groupID, userID)
 
 	err := row.Scan(&getTask.ID, &getTask.Task, &getTask.UserID, &getTask.GroupID, &getTask.CreatedAt)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return TasksEntry{}, fmt.Errorf("no more available tasks for user")
+		}
 		log.Println("Error getting task: ", err)
 		return TasksEntry{}, err
 	}
 
-	_, err = db.addTaskToLogs(getTask.ID, getTask.UserID)
+	_, err = db.addTaskToLogs(getTask.ID, userID)
 	if err != nil {
-		log.Println("Error adding task to logs: ", err)
+		return TasksEntry{}, fmt.Errorf("adding task to logs: %v", err)
 	}
 
 	return *getTask, nil

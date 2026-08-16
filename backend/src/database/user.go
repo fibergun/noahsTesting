@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (db Database) Login(name string, groupID int) (UsersEntry, error) {
+func (db Database) Login(name string, groupID int64) (UsersEntry, error) {
 	fmt.Println("logging in", name)
 
 	_, err := db.Exec("INSERT INTO users (name, group_id) VALUES (?,?)", name, groupID)
@@ -17,15 +17,15 @@ func (db Database) Login(name string, groupID int) (UsersEntry, error) {
 
 	}
 
-	return db.GetUser(name)
+	return db.GetUser(name, groupID)
 
 }
 
-func (db Database) GetUser(user string) (UsersEntry, error) {
+func (db Database) GetUser(user string, groupID int64) (UsersEntry, error) {
 
 	getUser := &UsersEntry{}
 
-	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE name = ?", user)
+	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE (name, group_id) = (?,?)", user, groupID)
 
 	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.Timestamp)
 	if err != nil {
