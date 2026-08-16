@@ -1,21 +1,26 @@
 package database
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 func (db Database) GetPoints(userID int) (int64, error) {
-
-	total, err := db.Exec(`SELECT COUNT(*) FROM logs WHERE user_id = ?`, userID)
+	var total int64
+	err := db.QueryRow(`SELECT COUNT(*) FROM logs WHERE user_id = ?`, userID).Scan(&total)
 	if err != nil {
 		return 0, fmt.Errorf("error getting total tasks: %w", err)
 	}
-	totalTasks, err := total.RowsAffected()
 
-	completed, err := db.Exec(`SELECT COUNT(*) FROM logs WHERE user_id = ? AND completed = true`, userID)
+	var completed int64
+
+	err = db.QueryRow(`SELECT COUNT(*) FROM logs WHERE user_id = ? AND completed = true`, userID).Scan(&completed)
 	if err != nil {
 		return 0, fmt.Errorf("error getting completed tasks: %w", err)
 	}
 
-	totalCompleted, err := completed.RowsAffected()
+	log.Printf("Total tasks: %d", total)
+	log.Printf("Total completed: %d", completed)
 
-	return 2*totalCompleted - totalTasks, nil
+	return 2*completed - total, nil
 }

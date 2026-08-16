@@ -73,6 +73,31 @@ func (s Server) getTasks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tasks)
 }
 
+func (s Server) getTask(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodGet {
+		log.Println("method not allowed", r.Method)
+		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
+		return
+	}
+
+	taskID, err := strconv.Atoi(r.URL.Query().Get("taskID"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	task, err := s.db.GetTask(int64(taskID))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(task)
+}
+
 func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodGet {

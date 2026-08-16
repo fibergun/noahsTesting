@@ -35,4 +35,5 @@ func (s Server) loadRoutes() {
 	s.server.HandleFunc("/tasks/list", s.getTasks)
 	s.server.HandleFunc("/tasks/random", s.getRandomTask)
 	s.server.HandleFunc("/tasks/complete", s.completeTask)
+	s.server.HandleFunc("/tasks/get", s.getTask)
 }

@@ -55,6 +55,7 @@ func (db Database) GetAllTasksByUserID(userID int) (AllTasks, error) {
 	}
 
 	points, err := db.GetPoints(userID)
+	log.Println("Points: ", points)
 	if err != nil {
 		return AllTasks{}, fmt.Errorf("getting points: %v", err)
 	}
