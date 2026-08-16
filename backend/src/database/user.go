@@ -27,7 +27,7 @@ func (db Database) GetUser(user string, groupID int64) (UsersEntry, error) {
 
 	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE (name, group_id) = (?,?)", user, groupID)
 
-	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.Timestamp)
+	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.CreatedAt)
 	if err != nil {
 		log.Println("Error getting user: ", err)
 		return UsersEntry{}, fmt.Errorf("getting user: %v", err)
@@ -43,7 +43,7 @@ func (db Database) GetUserByID(userID int) (UsersEntry, error) {
 
 	row := db.QueryRow("SELECT id, group_id, name, created_at FROM users WHERE id = ?", userID)
 
-	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.Timestamp)
+	err := row.Scan(&getUser.ID, &getUser.GroupID, &getUser.Name, &getUser.CreatedAt)
 	if err != nil {
 		log.Println("Error getting user: ", err)
 		return UsersEntry{}, fmt.Errorf("getting user: %v", err)

@@ -28,7 +28,7 @@ func (db Database) checkTaskExistsInLogs(taskID int64, userID int64) (LogsEntry,
 
 	row := db.QueryRow("SELECT * FROM logs WHERE (task_id, user_id) = (?,?)", taskID, userID)
 
-	err := row.Scan(&getLog.ID, &getLog.TaskID, &getLog.UserID, &getLog.Completed, &getLog.UpdatedAt)
+	err := row.Scan(&getLog.ID, &getLog.TaskID, &getLog.UserID, &getLog.Completed, &getLog.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return LogsEntry{}, false, fmt.Errorf("task not found", err)

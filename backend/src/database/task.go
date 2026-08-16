@@ -38,25 +38,25 @@ func (db Database) GetTask(taskID int64) (TasksEntry, error) {
 
 func (db Database) GetAllTasksByUserID(userID int) (AllTasks, error) {
 
-	rows, err := db.Query("SELECT id, task, user_id, group_id, created_at FROM tasks WHERE user_id = ? ORDER BY id", userID)
+	rows, err := db.Query("SELECT log_id, task_id, user_id, completed FROM logs WHERE user_id = ? ORDER BY created_at", userID)
 	if err != nil {
-		return AllTasks{}, err
+		return AllTasks{}, fmt.Errorf("getting all tasks: %v", err)
 	}
 	defer rows.Close()
 
-	getAllTasks := []TasksEntry{}
+	getAllTasks := []LogsEntry{}
 	for rows.Next() {
-		var task TasksEntry
-		err = rows.Scan(&task.ID, &task.Task, &task.UserID, &task.GroupID, &task.CreatedAt)
+		var task LogsEntry
+		err = rows.Scan(&task.ID, &task.TaskID, &task.UserID, &task.Completed)
 		if err != nil {
-			return AllTasks{}, err
+			return AllTasks{}, fmt.Errorf("getting task: %v", err)
 		}
 		getAllTasks = append(getAllTasks, task)
 	}
 
 	points, err := db.GetPoints(userID)
 	if err != nil {
-		return AllTasks{}, err
+		return AllTasks{}, fmt.Errorf("getting points: %v", err)
 	}
 
 	return AllTasks{

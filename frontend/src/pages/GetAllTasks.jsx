@@ -5,10 +5,10 @@ function GetAllTasks(){
     const [tasks, setTasks] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {session} = useSession()
+    const {session, loading: sessionLoading} = useSession()
 
     useEffect(() => {
-
+            if(sessionLoading || !session)return;
 
     async function handleRequest() {
         try {
@@ -19,10 +19,11 @@ function GetAllTasks(){
 
             if (!response.ok) {
                 const message = await response.text()
-                alert(message)
+                setError(message);
+                return;
             }
             const data = await response.json();
-            setTasks(data);
+            setTasks(data.tasks);
         } catch (err) {
             alert("Something went wrong: " + err.message);
         } finally {
@@ -32,15 +33,34 @@ function GetAllTasks(){
 
         handleRequest();
 
-    }, [])
+    }, [session, sessionLoading])
+
+    async function completeTask(taskID) {
+        try {
+            const response = await fetch(`/tasks/complete?taskID=${taskID}`, {
+                method: 'POST',
+            });
+            if (!response.ok) {
+                const message = await response.text();
+                alert(message)
+                return;
+            }
+            setTasks((prev) => prev.filter((t) => t.taskID !== taskID));
+        } catch (err) {
+            alert("Something went wrong: " + err.message);
+        }
+    }
 
     if (loading) return <p>Loading tasks...</p>;
     if (error) return <p>Error: {error}</p>;
 
     return(
         <ul>
-            {tasks.map((task) =>(
-                <li key={task.id}>{task.name}</li>
+            {tasks.map((task) => (
+                <li key={task.taskID}>
+                    {task.task}
+                    <button onClick={() => completeTask(task.taskID)}>Complete</button>
+                </li>
             ))}
         </ul>
     );

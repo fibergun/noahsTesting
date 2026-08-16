@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS logs (
                                     task_id INTEGER NOT NULL,
                                     user_id INTEGER NOT NULL,
                                     completed BOOLEAN NOT NULL DEFAULT FALSE,
-                                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                                     UNIQUE(task_id, user_id)
 );

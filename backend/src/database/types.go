@@ -10,15 +10,15 @@ type Database struct {
 }
 
 type AllTasks struct {
-	Tasks  []TasksEntry `json:"tasks"`
-	Points int64        `json:"points"`
+	Tasks  []LogsEntry `json:"tasks"`
+	Points int64       `json:"points"`
 }
 
 type UsersEntry struct {
 	ID        int64     `json:"userID"`
 	GroupID   int64     `json:"groupID"`
 	Name      string    `json:"username"`
-	Timestamp time.Time `json:"timestamp"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type TasksEntry struct {
@@ -34,5 +34,5 @@ type LogsEntry struct {
 	TaskID    int64      `json:"task"`
 	UserID    int64      `json:"userID"`
 	Completed bool       `json:"completed"`
-	UpdatedAt *time.Time `json:"updatedAt"`
+	CreatedAt *time.Time `json:"createdAt"`
 }
