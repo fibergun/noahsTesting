@@ -31,7 +31,7 @@ type TasksEntry struct {
 
 type LogsEntry struct {
 	ID        int64      `json:"logID"`
-	TaskID    int64      `json:"task"`
+	TaskID    int64      `json:"taskID"`
 	UserID    int64      `json:"userID"`
 	Completed bool       `json:"completed"`
 	CreatedAt *time.Time `json:"createdAt"`

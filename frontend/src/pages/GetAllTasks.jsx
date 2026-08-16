@@ -57,7 +57,7 @@ function GetAllTasks(){
     return(
         <ul>
             {tasks.map((task) => (
-                <li key={task.taskID}>
+                <li key={task.task}>
                     {task.task}
                     <button onClick={() => completeTask(task.taskID)}>Complete</button>
                 </li>
