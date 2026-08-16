@@ -9,6 +9,11 @@ type Database struct {
 	*sql.DB
 }
 
+type AllTasks struct {
+	Tasks  []TasksEntry `json:"tasks"`
+	Points int64        `json:"points"`
+}
+
 type UsersEntry struct {
 	ID        int64     `json:"userID"`
 	GroupID   int64     `json:"groupID"`

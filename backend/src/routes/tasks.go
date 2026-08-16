@@ -18,7 +18,6 @@ type TasksRequest struct {
 }
 
 func (s Server) makeTask(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("entering makeTask")
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
 		return
@@ -42,8 +41,6 @@ func (s Server) makeTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	log.Println("made task:", taskEntry)
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -109,6 +106,24 @@ func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(randomTask)
 }
 
-//func (s Server)updateTask(w http.ResponseWriter, r *http.Request)  {
-//
-//}
+func (s Server) completeTask(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
+		return
+	}
+
+	taskID, err := strconv.Atoi(r.URL.Query().Get("taskID"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = s.db.CompleteTask(taskID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

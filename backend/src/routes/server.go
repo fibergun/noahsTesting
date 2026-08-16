@@ -34,4 +34,5 @@ func (s Server) loadRoutes() {
 	s.server.HandleFunc("/tasks/make", s.makeTask) //maybe also use to update?
 	s.server.HandleFunc("/tasks/list", s.getTasks)
 	s.server.HandleFunc("/tasks/random", s.getRandomTask)
+	s.server.HandleFunc("/tasks/complete", s.completeTask)
 }
