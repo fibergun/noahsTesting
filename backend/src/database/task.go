@@ -72,7 +72,7 @@ func (db Database) GetRandomTask(groupID int64, userID int64) (TasksEntry, error
 		AND id NOT IN (SELECT task_id FROM logs WHERE user_id = ?)
 		ORDER BY RANDOM() LIMIT 1`, groupID, userID)
 
-	err := row.Scan(&getTask.ID, &getTask.Task, &getTask.UserID, &getTask.GroupID, &getTask.CreatedAt)
+	err := row.Scan(&getTask.ID, &getTask.Task, &getTask.GroupID, &getTask.UserID, &getTask.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return TasksEntry{}, fmt.Errorf("no more available tasks for user")

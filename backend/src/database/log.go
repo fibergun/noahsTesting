@@ -10,6 +10,9 @@ func (db Database) addTaskToLogs(taskID int64, userID int64) (LogsEntry, error) 
 	if ok {
 		return checkTask, fmt.Errorf("user already has this task")
 	}
+	if err != nil {
+		return LogsEntry{}, err
+	}
 
 	_, err = db.Exec("INSERT INTO logs (task_id, user_id) VALUES (?, ?) ", taskID, userID)
 	if err != nil {
@@ -31,7 +34,7 @@ func (db Database) checkTaskExistsInLogs(taskID int64, userID int64) (LogsEntry,
 	err := row.Scan(&getLog.ID, &getLog.TaskID, &getLog.UserID, &getLog.Completed, &getLog.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return LogsEntry{}, false, fmt.Errorf("task not found", err)
+			return LogsEntry{}, false, fmt.Errorf("task not found %v", err)
 		}
 		return LogsEntry{}, false, err
 	}

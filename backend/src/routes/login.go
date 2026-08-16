@@ -34,8 +34,6 @@ func (s Server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	strings.ToLower(user.Username)
-
 	userReturn, err := s.db.Login(strings.ToLower(user.Username), groupID)
 	if err != nil {
 		log.Println("getting user :", err)
