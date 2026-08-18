@@ -13,7 +13,7 @@ type UserRequest struct {
 }
 
 func (s Server) login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("entering login")
+	log.Println("login")
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return

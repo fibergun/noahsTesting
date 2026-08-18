@@ -2,7 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -18,6 +17,7 @@ type TasksRequest struct {
 }
 
 func (s Server) makeTask(w http.ResponseWriter, r *http.Request) {
+	log.Println("makeTask")
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
 		return
@@ -48,7 +48,7 @@ func (s Server) makeTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) getTasks(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("getTasks")
 	if r.Method != http.MethodGet {
 		log.Println("method not allowed", r.Method)
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
@@ -74,7 +74,7 @@ func (s Server) getTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) getTask(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("getTask")
 	if r.Method != http.MethodGet {
 		log.Println("method not allowed", r.Method)
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
@@ -99,7 +99,7 @@ func (s Server) getTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("getRandomTask")
 	if r.Method != http.MethodGet {
 		log.Println("method not allowed", r.Method)
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
@@ -108,31 +108,31 @@ func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
 
 	userID, err := strconv.Atoi(r.URL.Query().Get("userID"))
 	if err != nil {
-		log.Println(err)
+		log.Println("stringconv:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	user, err := s.db.GetUserByID(userID)
 	if err != nil {
+		log.Println("get user by id:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	randomTask, err := s.db.GetRandomTask(user.GroupID, user.ID)
 	if err != nil {
+		log.Println("get random task:", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 
-	fmt.Println(randomTask)
-
 	json.NewEncoder(w).Encode(randomTask)
 }
 
 func (s Server) completeTask(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("completeTask")
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
 		return

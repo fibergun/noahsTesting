@@ -55,7 +55,6 @@ func (db Database) GetAllTasksByUserID(userID int) (AllTasks, error) {
 	}
 
 	points, err := db.GetPoints(userID)
-	log.Println("Points: ", points)
 	if err != nil {
 		return AllTasks{}, fmt.Errorf("getting points: %v", err)
 	}
@@ -83,6 +82,7 @@ func (db Database) GetRandomTask(groupID int64, userID int64) (TasksEntry, error
 
 	_, err = db.addTaskToLogs(getTask.ID, userID)
 	if err != nil {
+		log.Println("Error adding task to logs: ", err)
 		return TasksEntry{}, fmt.Errorf("adding task to logs: %v", err)
 	}
 

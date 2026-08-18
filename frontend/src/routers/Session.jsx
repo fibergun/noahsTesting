@@ -1,40 +1,43 @@
+import { createContext, useContext, useState, useEffect } from "react";
 
-import {createContext, useContext, useState, useEffect} from "react";
+const SessionContext = createContext(null);
 
-const SessionContext = createContext(null)
+export function SessionProvider({ children }) {
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-export function SessionProvider({ children }){
-const [session, setSession] = useState(null);
-const [loading, setLoading] = useState(true);
-
-useEffect(() =>{
-    const stored = localStorage.getItem('session');
-    if (stored){
-        setSession (JSON.parse(stored));
+  useEffect(() => {
+    const stored = localStorage.getItem("session");
+    if (stored) {
+      setSession(JSON.parse(stored));
     }
     setLoading(false);
-}, [])
+  }, []);
 
-    const login = (userName, userID) => {
-    const sessionData = {username: userName, userID: userID, loggedInAt: Date.now()};
-    localStorage.setItem('session', JSON.stringify(sessionData));
-    setSession(sessionData);
+  const login = (userName, userID) => {
+    const sessionData = {
+      username: userName,
+      userID: userID,
+      loggedInAt: Date.now(),
     };
+    localStorage.setItem("session", JSON.stringify(sessionData));
+    setSession(sessionData);
+  };
 
-const logout = () => {
-    localStorage.removeItem('session');
+  const logout = () => {
+    localStorage.removeItem("session");
     setSession(null);
-};
+  };
 
- return (
-     <SessionContext.Provider value={{session, login, logout, loading}}>
-         {children}
-     </SessionContext.Provider>
- );
+  return (
+    <SessionContext.Provider value={{ session, login, logout, loading }}>
+      {children}
+    </SessionContext.Provider>
+  );
 }
 
-export function useSession(){
-    const ctx = useContext(SessionContext);
-    if (!ctx) throw new Error('useSession must be used within SessionProvider');
-    return ctx;
+export function useSession() {
+  const ctx = useContext(SessionContext);
+  if (!ctx) throw new Error("useSession must be used within SessionProvider");
+  return ctx;
 }

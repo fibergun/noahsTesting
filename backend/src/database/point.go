@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"log"
 )
 
 func (db Database) GetPoints(userID int) (int64, error) {
@@ -18,9 +17,6 @@ func (db Database) GetPoints(userID int) (int64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("error getting completed tasks: %w", err)
 	}
-
-	log.Printf("Total tasks: %d", total)
-	log.Printf("Total completed: %d", completed)
 
 	return 2*completed - total, nil
 }

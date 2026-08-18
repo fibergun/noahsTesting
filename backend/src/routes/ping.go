@@ -2,7 +2,7 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -11,7 +11,7 @@ type PingResponse struct {
 }
 
 func (s Server) pingHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("pingHandler")
+	log.Println("pingHandler")
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
