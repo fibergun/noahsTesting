@@ -97,7 +97,7 @@ function GetAllTasks() {
           {task.completed ? (
             "Completed"
           ) : (
-            <button onClick={() => completeTask(task.taskID)}>Complete</button>
+            <button type="button" class="btn btn-success" onClick={() => completeTask(task.taskID)}>Complete</button>
           )}
         </li>
       ))}

@@ -6,21 +6,25 @@ import ProtectedRoute from "./routers/ProtectedRoute.jsx";
 import MakeTask from "./pages/MakeTask.jsx";
 import GetAllTasks from "./pages/GetAllTasks.jsx";
 import GetRandomTask from "./pages/GetRandomTask.jsx";
+import {Container, Nav, Navbar} from "react-bootstrap";
 
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/">Home</Link>
-        {" | "}
-        <Link to="/ping">Ping</Link>
-        {" | "}
-        <Link to="/tasks/make">Make Task</Link>
-        {" | "}
-        <Link to="/tasks/random">Get Random Task</Link>
-        {" | "}
-        <Link to="/tasks/list">All tasks</Link>
-      </nav>
+        <Navbar bg="dark" expand="md">
+            <Container>
+                <Navbar.Brand as={Link} to="/">siteTesting</Navbar.Brand>
+                <Navbar.Toggle aria-controls="main-nav" />
+                <Navbar.Collapse id="main-nav">
+                    <Nav>
+                        <Nav.Link as={Link} to="/ping">Ping</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/make">Make Task</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/random">Get Random Task</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/list">All tasks</Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
 
       <Routes>
         <Route
