@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"noahsTesting/backend/src/database"
+	"noahsTesting/backend/src/frontend"
 )
 
 type Server struct {
@@ -29,11 +30,13 @@ func (s Server) StartServer(addr string) error {
 
 func (s Server) loadRoutes() {
 	log.Println("Loading routes...")
-	s.server.HandleFunc("/api/ping", s.pingHandler)
-	s.server.HandleFunc("/api/login/{group}", s.login)
-	s.server.HandleFunc("/api/tasks/make", s.makeTask) //maybe also use to update?
-	s.server.HandleFunc("/api/tasks/list", s.getTasks)
-	s.server.HandleFunc("/api/tasks/random", s.getRandomTask)
-	s.server.HandleFunc("/api/tasks/complete", s.completeTask)
-	s.server.HandleFunc("/api/tasks/get", s.getTask)
+
+	s.server.HandleFunc("GET /api/ping", s.pingHandler)
+	s.server.HandleFunc("POST /api/login/{group}", s.login)
+	s.server.HandleFunc("POST /api/tasks/make", s.makeTask) //maybe also use to update?
+	s.server.HandleFunc("GET /api/tasks/list", s.getTasks)
+	s.server.HandleFunc("GET /api/tasks/random", s.getRandomTask)
+	s.server.HandleFunc("POST /api/tasks/complete", s.completeTask)
+	s.server.HandleFunc("GET /api/tasks/get", s.getTask)
+	s.server.Handle("GET /", frontend.Handler())
 }

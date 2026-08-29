@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Link, HashRouter} from "react-router-dom";
 import Home from "./pages/home";
 import Ping from "./pages/ping";
 import Group from "./routers/Group.jsx";
@@ -10,8 +10,8 @@ import {Container, Nav, Navbar} from "react-bootstrap";
 
 function App() {
   return (
-    <BrowserRouter>
-        <Navbar bg="dark" expand="md">
+    <HashRouter>
+        <Navbar bg="light" expand="md">
             <Container>
                 <Navbar.Brand as={Link} to="/">siteTesting</Navbar.Brand>
                 <Navbar.Toggle aria-controls="main-nav" />
@@ -69,7 +69,7 @@ function App() {
         />
         <Route path="/:group/login" element={<Group />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
