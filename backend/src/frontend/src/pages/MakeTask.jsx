@@ -16,10 +16,8 @@ function MakeTask() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        alert(
-          "succesfully created task: " + data.task + " with ID: " + data.taskID,
-        );
+        await response.json();
+        setTask("");
       } else {
         const message = await response.text();
         alert(message);
