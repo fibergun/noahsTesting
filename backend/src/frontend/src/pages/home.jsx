@@ -29,8 +29,8 @@ function Home() {
         meteen, in 15 minuten of in 30 minuten uit kan voeren, ook iets wat
         iemand verzameld/voorbereid moet hebben aan het einde van het weekend
         werkt goed.</p> <p>  Probeer er voor te zorgen dat alle taken daadwerkelijk
-        mogelijk zijn over de (resterende) duur van het weekend! </p><p> Regels zijn
-        niet uniek in de groep, dus 2 mensen kunnen dezelfde regel krijgen,
+        mogelijk zijn over de (resterende) duur van het weekend! </p><p> Taken zijn
+        niet uniek in de groep, dus 2 mensen kunnen dezelfde taak krijgen,
         probeer te zorgen dat de taken door meerdere mensen uitvoerbaar zijn,
         tenzij dit direct tegen het idee van de taak in gaat natuurlijk. </p><p> Probeer
         er aan te denken dat een taak door iedereen uitvoerbaar moet zijn.

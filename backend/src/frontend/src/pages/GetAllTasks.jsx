@@ -88,16 +88,21 @@ function GetAllTasks() {
   if (loading) return <p>Loading tasks...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+
   return (
-    <ul>
-      <p>You have: {points} points!</p>
-      {tasks.map((task) => (
-        <li key={task.taskID}>
-          {taskDetails[task.taskID]?.task ?? "Loading..."}
+      <ul className="list-unstyled">
+        <p>You have: {points} points!</p>
+        {sortedTasks.map((task) => (
+        <li
+            key={task.taskID}
+            className="d-flex justify-content-between align-items-center border rounded p-2 mb-2"
+        >
+          <span>{taskDetails[task.taskID]?.task ?? "Loading..."}</span>
           {task.completed ? (
-            "Completed"
+            <span>Completed</span>
           ) : (
-            <button type="button" class="btn btn-success" onClick={() => completeTask(task.taskID)}>Complete</button>
+              <button type="button" className="btn btn-success" onClick={() => completeTask(task.taskID)}>Complete</button>
           )}
         </li>
       ))}

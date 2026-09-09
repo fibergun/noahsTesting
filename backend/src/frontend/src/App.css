@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 0 auto;      /* centers it */
+    padding: 0 24px;     /* space between text and screen edges */
+}

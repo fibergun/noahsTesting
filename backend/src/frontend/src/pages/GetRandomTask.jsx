@@ -23,7 +23,6 @@ function GetRandomTask() {
         if (!response.ok) {
           const message = await response.text();
           setError(message);
-          alert(message);
           return;
         }
         const data = await response.json();

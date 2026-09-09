@@ -13,19 +13,20 @@ function App() {
     <HashRouter>
         <Navbar bg="light" expand="md">
             <Container>
-                <Navbar.Brand as={Link} to="/">siteTesting</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/">Noah's Spel</Navbar.Brand>
                 <Navbar.Toggle aria-controls="main-nav" />
                 <Navbar.Collapse id="main-nav">
                     <Nav>
                         <Nav.Link as={Link} to="/ping">Ping</Nav.Link>
-                        <Nav.Link as={Link} to="/tasks/make">Make Task</Nav.Link>
-                        <Nav.Link as={Link} to="/tasks/random">Get Random Task</Nav.Link>
-                        <Nav.Link as={Link} to="/tasks/list">All tasks</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/make">Maak Taak</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/random">Krijg Taak</Nav.Link>
+                        <Nav.Link as={Link} to="/tasks/list">Alle Taken</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
 
+        <div className="page-container">
       <Routes>
         <Route
           path="/"
@@ -69,6 +70,7 @@ function App() {
         />
         <Route path="/:group/login" element={<Group />} />
       </Routes>
+        </div>
     </HashRouter>
   );
 }
