@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function MakeTask() {
   const { session } = useSession();
-  const [task, setTask] = useState("task");
+  const [task, setTask] = useState("");
 
   async function handleMakeTask(event) {
     event.preventDefault();
