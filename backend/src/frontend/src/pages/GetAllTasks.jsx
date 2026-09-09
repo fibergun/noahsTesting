@@ -88,10 +88,12 @@ function GetAllTasks() {
   if (loading) return <p>Loading tasks...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+
   return (
     <ul>
       <p>You have: {points} points!</p>
-      {tasks.map((task) => (
+      {sortedTasks.map((task) => (
         <li key={task.taskID}>
           {taskDetails[task.taskID]?.task ?? "Loading..."}
           {task.completed ? (
