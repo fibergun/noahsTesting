@@ -90,9 +90,8 @@ func (db Database) GetRandomTask(groupID int64, userID int64) (TasksEntry, error
 
 }
 
-func (db Database) CompleteTask(taskID int) error {
-
-	_, err := db.Exec("UPDATE logs SET completed = true WHERE task_id = ?", taskID)
+func (db Database) CompleteTask(taskID int, userID int) error {
+	_, err := db.Exec("UPDATE logs SET completed = true WHERE task_id = ? AND user_id = ?", taskID, userID)
 	if err != nil {
 		return err
 	}

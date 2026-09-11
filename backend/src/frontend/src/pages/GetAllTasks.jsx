@@ -64,12 +64,13 @@ function GetAllTasks() {
 
   async function getTask(taskID) {
     try {
-      const response = await fetch(`/api/tasks/get?taskID=${taskID}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+          `/api/tasks/complete?taskID=${taskID}&userID=${session.userID}`,
+          { method: "POST" },
+      );
 
       if (!response.ok) {
-        alert(await response.text());
+
         return;
       }
       const data = await response.json();

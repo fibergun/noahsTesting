@@ -132,6 +132,12 @@ func (s Server) getRandomTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s Server) completeTask(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.Atoi(r.URL.Query().Get("userID"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	log.Println("completeTask")
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed.", http.StatusMethodNotAllowed)
@@ -144,7 +150,7 @@ func (s Server) completeTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = s.db.CompleteTask(taskID)
+	err = s.db.CompleteTask(taskID, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

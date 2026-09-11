@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function LoginForm({ group }) {
   const { login } = useSession();
-  const [user, setUser] = useState("user");
+  const [user, setUser] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
