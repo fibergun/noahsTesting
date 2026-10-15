@@ -43,7 +43,7 @@ function GetAllTasks() {
 
   async function completeTask(taskID) {
     try {
-      const response = await fetch(`/api/tasks/complete?taskID=${taskID}`, {
+      const response = await fetch(`/api/tasks/complete?taskID=${taskID}&userID=${session.userID}`, {
         method: "POST",
       });
 
@@ -65,8 +65,8 @@ function GetAllTasks() {
   async function getTask(taskID) {
     try {
       const response = await fetch(
-          `/api/tasks/complete?taskID=${taskID}&userID=${session.userID}`,
-          { method: "POST" },
+          `/api/tasks/get?taskID=${taskID}`,
+          { method: "GET" },
       );
 
       if (!response.ok) {
